@@ -40,18 +40,19 @@ def an_honest_elf(honest_elves: list):
     if len(honest_elves) == 1:
         return honest_elves[0]
     if len(honest_elves) == 2:
-        return honest_elves[1]
-    if len(honest_elves) % 2 == 1:
-        potential_honest.append(honest_elves[-1])
+        st1, st2 = check_honesty(honest_elves[0], honest_elves[1])
+        if not (st1 and st2):
+            return honest_elves
     for i in range(len(honest_elves) // 2):
         state1, state2 = check_honesty(honest_elves[2*i], honest_elves[2*i + 1])
         if state1 and state2:
-            potential_honest.append(honest_elves[i])
+            potential_honest.append(honest_elves[2*i])
     return an_honest_elf(potential_honest)
 
 
 def all_honest_elves(the_chosen_one: Elf):
     result = {the_chosen_one.index: "honest"}
+    cnt = 0
     for i in elves:
         if the_chosen_one.index != i.index:
             st1, st2 = check_honesty(the_chosen_one, i)
@@ -59,11 +60,20 @@ def all_honest_elves(the_chosen_one: Elf):
                 result[i.index] = "honest"
             else:
                 result[i.index] = "liar"
-    return result
+            if st2:
+                cnt += 1
+    return result, cnt
 
 
 elves = []
 elves_creation()
 # print(elves)
 dobby = an_honest_elf(elves)
-print(all_honest_elves(dobby))
+if type(dobby) != list:
+    print(all_honest_elves(dobby)[0])
+else:
+    result1, cnt = all_honest_elves(dobby[0])
+    if cnt > len(elves)//2:
+        print(result1)
+    else:
+        print(all_honest_elves(dobby[1])[0])
