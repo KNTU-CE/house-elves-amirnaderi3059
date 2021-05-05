@@ -64,6 +64,5 @@ def all_honest_elves(the_chosen_one: Elf):
 
 elves = []
 elves_creation()
-# print(elves)
 dobby = an_honest_elf(elves)
 print(all_honest_elves(dobby))
